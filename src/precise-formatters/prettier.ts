@@ -14,6 +14,8 @@ import { CharacterRange } from '../utils';
 const ignore = require('ignore');
 const DiffMatchPatch = require('diff-match-patch');
 const dmp = new DiffMatchPatch();
+dmp.Patch_DeleteThreshold = 0;
+dmp.Match_Threshold = 0;
 
 let PRETTIER_SUPPORTED_FILE_EXTENSIONS: string[] = [];
 getSupportInfo().languages.forEach(language => {
