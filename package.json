@@ -18,7 +18,8 @@
     "precommit": "npm test && npm run precise-commits",
     "cz": "git-cz",
     "precise-commits": "bin/index.js",
-    "travis-deploy-once": "travis-deploy-once"
+    "travis-deploy-once": "travis-deploy-once",
+    "prepare": "npm run build"
   },
   "devDependencies": {
     "@types/execa": "^0.8.1",
@@ -65,6 +66,7 @@
       "ts",
       "js",
       "json"
-    ]
+    ],
+    "testURL": "file:/"
   }
 }

@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import { extname, join } from 'path';
 import {
   Options as PrettierOptions,
+  SupportLanguage,
   getSupportInfo,
   format,
   resolveConfig,
@@ -18,10 +19,10 @@ dmp.Patch_DeleteThreshold = 0;
 dmp.Match_Threshold = 0;
 
 let PRETTIER_SUPPORTED_FILE_EXTENSIONS: string[] = [];
-getSupportInfo().languages.forEach(language => {
+getSupportInfo().languages.forEach((language: SupportLanguage) => {
   PRETTIER_SUPPORTED_FILE_EXTENSIONS = [
     ...PRETTIER_SUPPORTED_FILE_EXTENSIONS,
-    ...language.extensions,
+    ...(language.extensions || []),
   ];
 });
 

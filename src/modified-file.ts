@@ -37,15 +37,15 @@ export class ModifiedFile {
    * The contents of the file in their current state on the user's file
    * system
    */
-  public fileContents: string;
+  public fileContents: string = '';
   /**
    * The final file contents, after we've run the formatter
    */
-  private formattedFileContents: string;
+  private formattedFileContents: string = '';
   /**
    * The resolved formatter config which applies to this file
    */
-  private formatterConfig: object | null;
+  private formatterConfig: object | null = null;
   /**
    * The calculated character ranges which have been modified
    * within this file
