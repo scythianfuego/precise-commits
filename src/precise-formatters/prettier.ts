@@ -15,8 +15,8 @@ import { CharacterRange } from '../utils';
 const ignore = require('ignore');
 const DiffMatchPatch = require('diff-match-patch');
 const dmp = new DiffMatchPatch();
-dmp.Patch_DeleteThreshold = 0;
-dmp.Match_Threshold = 0;
+dmp.Match_Threshold = 0.0001; // makes us way less fuzzy on replacement
+dmp.Match_Distance = 1000000; // makes us less dependent on distance
 
 let PRETTIER_SUPPORTED_FILE_EXTENSIONS: string[] = [];
 getSupportInfo().languages.forEach((language: SupportLanguage) => {
@@ -81,19 +81,20 @@ export const preciseFormatterPrettier: PreciseFormatter<PrettierOptions> = {
   ): string {
     let patches: any = [];
     characterRanges.forEach(characterRange => {
-      const diffs = dmp.diff_main(
-        fileContents,
-        format(fileContents, {
-          ...config,
-          ...{
-            rangeStart: characterRange.rangeStart,
-            rangeEnd: characterRange.rangeEnd,
-          },
-        }),
-      );
+      const formatted = format(fileContents, {
+        ...config,
+        ...{
+          rangeStart: characterRange.rangeStart,
+          rangeEnd: characterRange.rangeEnd,
+        },
+      });
+      const diffs = dmp.diff_main(fileContents, formatted);
+      // console.log('***\n', formatted, '***');
       patches = [...patches, ...dmp.patch_make(fileContents, diffs)];
     });
+    // console.log('===\n', dmp.patch_toText(patches), '===');
     const [formattedContents] = dmp.patch_apply(patches, fileContents);
+    // console.log('>>>\n', formattedContents, '>>>');
     return formattedContents;
   },
   /**
